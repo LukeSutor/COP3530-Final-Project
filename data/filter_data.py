@@ -5,7 +5,7 @@ def filter():
     Load raw ratings and movie data, filter out movies with less than 5000 
     ratings and users with less than 600 ratings, and save filtered data to csv
     '''
-    # load in ratings.cvs data
+    # load in ratings.csv data
     ratings = pd.read_csv('data/ratings.csv')
 
     # filter out movies with less than 5000 ratings
@@ -36,37 +36,44 @@ def filter():
     movies.to_csv('data/movies_filtered.csv', index=False)
 
 
-def make_matrix():
+def make_train_test():
     '''
-    Make a pivot table of the ratings data
+    Make train and test sets from the filtered ratings data
     '''
-    # load in ratings.cvs data
+    # load in ratings.csv data
     ratings = pd.read_csv('data/ratings_filtered.csv')
 
-    # create a pivot table with userId as the rows, movieId as the columns, and ratings as the values
-    ratings_matrix = ratings.pivot_table(index='userId', columns='movieId', values='rating')
-    # fill in all NaN values with 0
-    ratings_matrix.fillna(0, inplace=True)
+    # split into train and test sets
+    train = ratings.sample(frac=0.99, random_state=200)
+    test = ratings.drop(train.index)
 
-    # save matrix to csv
-    ratings_matrix.to_csv('data/ratings_matrix.csv')
+    # save train and test sets to csv
+    train.to_csv('data/train.csv', index=False)
+    test.to_csv('data/test.csv', index=False)
 
 
-def get_numpy():
+def get_matrix(train=True):
     '''
-    Get a numpy array of the ratings matrix
+    Make pivot tables, convert to numpy, and return them
     '''
-    # load in ratings_matrix.cvs data
-    ratings_matrix = pd.read_csv('data/ratings_matrix.csv')
-    # get numpy array
-    ratings_matrix = ratings_matrix.to_numpy()
+    # load proper data
+    if train:
+        data = pd.read_csv('data/train.csv')
+    else:
+        data = pd.read_csv('data/test.csv')
+    # make pivot table
+    train_matrix = data.pivot_table(index='userId', columns='movieId', values='rating')
+    train_matrix.to_csv('data/train_matrix.csv')
+    train_matrix = train_matrix.to_numpy()
     # get rid of the first column (userIds)
-    ratings_matrix = ratings_matrix[:,1:]
-    return ratings_matrix
+    train_matrix = train_matrix[:,1:]
+    return train_matrix
 
 
 
 if __name__ == '__main__':
     # filter()
-    # make_matrix()
-    print(get_numpy())
+    make_train_test()
+    make_matrix()
+    # get_numpy()
+    pass
