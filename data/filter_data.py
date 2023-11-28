@@ -73,7 +73,5 @@ def get_matrix(train=True):
 
 if __name__ == '__main__':
     # filter()
-    make_train_test()
-    make_matrix()
-    # get_numpy()
+    # make_train_test()
     pass

@@ -5,7 +5,7 @@ print(sys.path)
 from data.filter_data import get_matrix
 
 
-class MF():
+class Matrix_Factorization():
 
     def __init__(self, K=100, steps=500, alpha=0.001, beta=0.001, update_interval=10):
         self.K = K
@@ -128,7 +128,7 @@ class MF():
         self.mu = np.loadtxt("data/mu.csv", delimiter=",")
 
 def train():
-    mf = MF()
+    mf = Matrix_Factorization()
     mf.fit()
     mf.print_results()
     mf.save_as_csv()
