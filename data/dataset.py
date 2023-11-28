@@ -31,14 +31,28 @@ class Dataset():
     
     def get_random_n_users(self, n):
         '''
-        Get a random sample of n users from the testing data and return as python array
+        Get a random sample of n users from the testing data and return as array
+
+        Array properties:
+        0th index: userId
+        1st index: movieId
+        2nd index: rating
         '''
         return self.test_dataframe.sample(n).to_numpy()
     
+    def get_movie_name(self, id):
+        '''
+        Get the movie name based on id, return empty string if not found
+        '''
+        movies_dataframe = pd.read_csv('data/movies_filtered.csv')
+        movie = movies_dataframe.loc[movies_dataframe['movieId'] == id]
+        if movie.empty:
+            return ''
+        else:
+            return movie['title'].iloc[0]    
 
 if __name__ == '__main__':
     dataset = Dataset()
     # print(dataset.get_train_dataframe())
     # print(dataset.get_test_dataframe())
-    print(dataset.get_train_matrix())
-    # print(dataset.get_random_n_users(10))
+    print(dataset.get_train_matrix().shape)
