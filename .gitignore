@@ -3,5 +3,6 @@ ratings.csv
 ratings_filtered.csv
 ratings_matrix_full.csv
 test_matrix.csv
+train_matrix.csv
 
 *.pyc

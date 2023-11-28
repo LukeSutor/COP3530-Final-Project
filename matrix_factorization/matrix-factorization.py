@@ -54,9 +54,10 @@ class Matrix_Factorization():
 
         # training loop
         progress_bar = tqdm(total=self.steps)
+        mse = []
         for i in range(self.steps):
-            mse = self.perform_epoch(samples, i)
-            progress_bar.set_description(f"MSE: {mse:.4f}")
+            mse.append(self.perform_epoch(samples, i))
+            progress_bar.set_description(f"MSE: {mse[-1]:.4f}")
             progress_bar.update(1)
 
             # save the current state of the model every save_interval steps
@@ -64,6 +65,9 @@ class Matrix_Factorization():
                 self.save_as_csv()
 
         progress_bar.close()
+
+        # print all the mse values to a csv file
+        np.savetxt(f"matrix_factorization/models/{self.name}/mse.csv", mse, delimiter=",")
 
         # save the final state of the model
         self.save_as_csv()
@@ -117,25 +121,6 @@ class Matrix_Factorization():
         Compute the full matrix using the resultant biases, P and Q
         '''
         return self.mu + self.bu[:,np.newaxis] + self.bi[np.newaxis:,] + self.P.dot(self.Q.T)
-    
-    def print_results(self):
-        '''
-        Print the results of the matrix factorization
-        '''
-        print("P x Q:")
-        print(self.full_matrix())
-        print("Global bias:")
-        print(self.mu)
-        print("User bias:")
-        print(self.bu)
-        print("Item bias:")
-        print(self.bi)
-        print("User latent feature matrix:")
-        print(self.P)
-        print("Item latent feature matrix:")
-        print(self.Q)
-        print("Final RMSE:")
-        print(self.mse(self.R))
 
     def save_as_csv(self):
         '''
@@ -158,9 +143,8 @@ class Matrix_Factorization():
         self.mu = np.loadtxt(f"matrix_factorization/models/{self.name}/mu.csv", delimiter=",")
 
 def train():
-    mf = Matrix_Factorization("Train_1", save_interval=1)
+    mf = Matrix_Factorization("Train_2", K=200)
     mf.fit()
-    # mf.print_results()
     print(mf.full_matrix())
 
 if __name__ == "__main__":
