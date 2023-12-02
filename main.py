@@ -19,17 +19,8 @@ def main():
     ui.set_mf(mf)
     ui.set_knn(knn)
 
-    for i in range(10):
-        temp = dataset.get_random_n_users(1)
-        l = knn.KNN(temp[0][0], temp[0][1], 5)
-        print(f"{l}, ")
-
-    
-
-
     # create the window
     ui.create_window()
-
 
 
 if __name__ == "__main__":
