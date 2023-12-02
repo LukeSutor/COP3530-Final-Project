@@ -9,7 +9,7 @@ from user_interface.user_interface import User_Interface
 def main():
     # initialize dataset, matrix factorization, knn, and user interface
     dataset = Dataset()
-    mf = Matrix_Factorization("Train_2")
+    mf = Matrix_Factorization("Train_3")
     knn = K_Nearest_Neighbors()
     ui = User_Interface()
 
