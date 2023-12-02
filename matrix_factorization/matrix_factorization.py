@@ -143,7 +143,7 @@ class Matrix_Factorization():
         self.mu = np.loadtxt(f"matrix_factorization/models/{self.name}/mu.csv", delimiter=",")
 
 def train():
-    mf = Matrix_Factorization("Train_2", K=200)
+    mf = Matrix_Factorization("Train_3", K=400, steps=1000)
     mf.fit()
     print(mf.full_matrix())
 
