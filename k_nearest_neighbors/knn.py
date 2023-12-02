@@ -23,7 +23,14 @@ class K_Nearest_Neighbors():
 
 
 
-    def KNN(self, user_row, movie_col, k=5):
+    def KNN(self, user_id, movie_id, k=5):
+
+        # the row that contains the users data (int)
+        user_row = self.dataset.get_user_id(user_id)
+
+        # the column that the movie is in (int)
+        movie_col = self.dataset.get_movie_id(movie_id)
+
         
         # i is the index of row, going through the differnet users
         for user_index in range(self.m.shape[0]):
@@ -34,7 +41,7 @@ class K_Nearest_Neighbors():
             # j is the index of the col, going through the different users
             for movie_index in range(self.m.shape[1]):
 
-                if movie_index != movie_col:
+                if movie_index != movie_col and user_row != user_index:
                     # user_row doesn't change only the movie index does
                     perm_user_score = self.m[user_row][movie_index]
 
@@ -60,7 +67,7 @@ class K_Nearest_Neighbors():
                             self.d[avg] = user_index
                         
                         # the greatest neighbor needs to be replaced
-                        elif self.top[4] > avg:
+                        elif self.top[4] > avg and self.m[user_index][movie_col]:
                             self.top[4] = avg
                             self.top.sort()
                             self.d[avg] = user_index
