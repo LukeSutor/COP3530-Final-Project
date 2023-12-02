@@ -11,6 +11,11 @@ class User_Interface():
         self.mf_text = tkinter.Text(self.window, bg="light grey", height=1, width=10, state=tkinter.DISABLED)
         self.actual_text = tkinter.Text(self.window, bg="light grey", height=1, width=10, state=tkinter.DISABLED)
         self.knn_text = tkinter.Text(self.window, bg="light grey", height=1, width=10, state=tkinter.DISABLED)
+        self.knn_correct = tkinter.Text(self.window, bg="light grey", height=1, width=10, state=tkinter.DISABLED)
+        self.mf_correct = tkinter.Text(self.window, bg="light grey", height=1, width=10, state=tkinter.DISABLED)
+        self.knn_correct_num = 0
+        self.mf_correct_num = 0
+        self.winner = "N/A"
 
     def set_dataset(self, dataset):
         self.dataset = dataset
@@ -89,6 +94,21 @@ class User_Interface():
         mf_label.place(relx=0.75, rely=0.8, anchor=tkinter.CENTER)
         self.mf_text.place(relx=0.75, rely=0.85, anchor=tkinter.CENTER)
 
+        # create text fields for tracking the number of correct predictions for each algorithm
+        knn_correct_label = tkinter.Label(self.window, text="KNN Correct:")
+        mf_correct_label = tkinter.Label(self.window, text="MF Correct:")
+        knn_correct_label.place(relx=0.25, rely=0.9, anchor=tkinter.CENTER)
+        mf_correct_label.place(relx=0.75, rely=0.9, anchor=tkinter.CENTER)
+
+        self.knn_correct.place(relx=0.25, rely=0.94, anchor=tkinter.CENTER)
+        self.mf_correct.place(relx=0.75, rely=0.94, anchor=tkinter.CENTER)
+
+        # create a "winner" label
+        self.update_winner()
+
+        # Create a button to reset the number of correct predictions
+        reset_button = tkinter.Button(self.window, text="Reset", command=lambda: self.reset_correct())
+        reset_button.place(relx=0.5, rely=0.94, anchor=tkinter.CENTER)
 
     
     def run_comparison(self, index):
@@ -122,6 +142,53 @@ class User_Interface():
         self.knn_text.delete("1.0", tkinter.END)
         self.knn_text.insert(tkinter.END, knn_prediction)
         self.knn_text.config(state=tkinter.DISABLED)
+
+        # see which prediction was closer to the actual rating
+        if abs(rating - mf_prediction) < abs(rating - knn_prediction):
+            self.mf_correct_num += 1
+        else:
+            self.knn_correct_num += 1
+
+        self.mf_correct.config(state=tkinter.NORMAL)
+        self.mf_correct.delete("1.0", tkinter.END)
+        self.mf_correct.insert(tkinter.END, self.mf_correct_num)
+        self.mf_correct.config(state=tkinter.DISABLED)
+
+        self.knn_correct.config(state=tkinter.NORMAL)
+        self.knn_correct.delete("1.0", tkinter.END)
+        self.knn_correct.insert(tkinter.END, self.knn_correct_num)
+        self.knn_correct.config(state=tkinter.DISABLED)
+
+        # update winner
+        if self.knn_correct_num > self.mf_correct_num:
+            self.winner = "KNN"
+        elif self.knn_correct_num < self.mf_correct_num:
+            self.winner = "MF"
+        else:
+            self.winner = "Tie"
+
+        self.update_winner()
+
+    def reset_correct(self):
+        self.knn_correct_num = 0
+        self.mf_correct_num = 0
+        self.knn_correct.config(state=tkinter.NORMAL)
+        self.knn_correct.delete("1.0", tkinter.END)
+        self.knn_correct.insert(tkinter.END, self.knn_correct_num)
+        self.knn_correct.config(state=tkinter.DISABLED)
+
+        self.mf_correct.config(state=tkinter.NORMAL)
+        self.mf_correct.delete("1.0", tkinter.END)
+        self.mf_correct.insert(tkinter.END, self.mf_correct_num)
+        self.mf_correct.config(state=tkinter.DISABLED)
+
+        # update winner
+        self.winner = "N/A"
+        self.update_winner()
+
+    def update_winner(self):
+        winner_label = tkinter.Label(self.window, text=f"Winner: {self.winner}", width=20)
+        winner_label.place(relx=0.5, rely=0.9, anchor=tkinter.CENTER)
         
 
 
