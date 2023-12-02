@@ -10,20 +10,15 @@ from data.filter_data import get_matrix
 class K_Nearest_Neighbors():
 
     def __init__(self):
-        self.average = 0.00
         self.dataset = Dataset()
         self.m = self.dataset.get_train_matrix()
-        self.top = [] 
-        self.d = {}
-
-    def get_predicted_score(self, movie_col):
-        # use the 5 closest avgs to see what those users rated and return the avg
-
-        pass
-
 
 
     def KNN(self, user_id, movie_id, k=5):
+
+        top = [] 
+        d = {}
+
 
         # the row that contains the users data (int)
         user_row = self.dataset.get_user_id(user_id)
@@ -59,25 +54,25 @@ class K_Nearest_Neighbors():
                         avg = total_user_diff / counter
                         
                         # there isn't even 5 neighbors yet
-                        if len(self.top) < 5:
+                        if len(top) < 5:
 
-                            self.top.append(avg)
-                            self.top.sort()
+                            top.append(avg)
+                            top.sort()
                             # store what user is associated with this avg
-                            self.d[avg] = user_index
+                            d[avg] = user_index
                         
                         # the greatest neighbor needs to be replaced
-                        elif self.top[4] > avg and self.m[user_index][movie_col]:
-                            self.top[4] = avg
-                            self.top.sort()
-                            self.d[avg] = user_index
+                        elif top[4] > avg and self.m[user_index][movie_col]:
+                            top[4] = avg
+                            top.sort()
+                            d[avg] = user_index
         
         total = 0.0
         c = 0
 
-        for avg in self.top:
+        for avg in top:
 
-            user_index = self.d[avg]
+            user_index = d[avg]
             movie_score = self.m[user_index][movie_col]
             
             if movie_score != 0:
