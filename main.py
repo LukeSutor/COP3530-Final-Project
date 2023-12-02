@@ -7,6 +7,7 @@ from k_nearest_neighbors.knn import K_Nearest_Neighbors
 from user_interface.user_interface import User_Interface
 
 def main():
+    
     # initialize dataset, matrix factorization, knn, and user interface
     dataset = Dataset()
     mf = Matrix_Factorization("Train_2")
