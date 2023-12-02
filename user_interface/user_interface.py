@@ -103,6 +103,8 @@ class User_Interface():
 
         # get the predictions
         mf_prediction = self.mf.get_rating(user_index-1, movie_index-1)
+        knn_prediction = self.knn.KNN(user_index-1, movie_index-1)
+
 
 
         # set the text fields
