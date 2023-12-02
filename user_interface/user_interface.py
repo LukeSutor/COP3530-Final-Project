@@ -103,7 +103,7 @@ class User_Interface():
 
         # get the predictions
         mf_prediction = self.mf.get_rating(user_index-1, movie_index-1)
-        knn_prediction = self.knn.KNN(user_index-1, movie_index-1)
+        knn_prediction = self.knn.KNN(user_id, movie_id)
 
 
 
@@ -117,6 +117,11 @@ class User_Interface():
         self.actual_text.delete("1.0", tkinter.END)
         self.actual_text.insert(tkinter.END, rating)
         self.actual_text.config(state=tkinter.DISABLED)
+
+        self.knn_text.config(state=tkinter.NORMAL)
+        self.knn_text.delete("1.0", tkinter.END)
+        self.knn_text.insert(tkinter.END, knn_prediction)
+        self.knn_text.config(state=tkinter.DISABLED)
         
 
 
